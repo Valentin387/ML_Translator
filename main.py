@@ -471,10 +471,15 @@ if __name__ =="__main__":
                 with open("OutputSampleHex.txt",'a') as Output:
                     Output.write(Hexa)
                     Output.write("\n")
-            if (type=='I'):
+            if (type=='I' or type=='L' or type=='IJ'):
                 rd=bin(decode_identifier(elements[1]))
-                rs1=bin(decode_identifier(elements[2]))
-                imm=bin(decode_identifier(elements[3]))
+                if (type=='I'):
+                    rs1=bin(decode_identifier(elements[2]))
+                    imm=bin(decode_identifier(elements[3]))
+                else:
+                    imm=bin(decode_identifier(elements[2]))
+                    rs1=bin(decode_identifier(elements[3]))
+
                 if(imm[0]=='-'):
                     isNeg=True
                     imm=converter_A2Complement(imm)
@@ -529,6 +534,8 @@ if __name__ =="__main__":
                 with open("OutputSampleHex.txt",'a') as Output:
                     Output.write(Hexa)
                     Output.write("\n")
+            if (type=='Ului' or type=='Uauipc'):
+                print("U")
 
 
 
