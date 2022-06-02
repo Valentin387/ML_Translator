@@ -24,15 +24,53 @@ def takeJumpAwayArray(list):
     return l1
 
 #this is the ugliest code I've made. But it works
-def find_the_mnemonic(list_of_Type_dictionaries,word):
-    mnemonic=""
+def find_the_type(list_of_Type_dictionaries,word):
+    type=""
     for d in list_of_Type_dictionaries:
         for new_k,new_val in d.items():
             for i in new_val:
                 if word==i:
-                    mnemonic=new_k
+                    type=new_k
                     break
-    return mnemonic
+    return type
+
+def decode_identifier(string):
+    if string=='ra':
+        return 1
+    elif string=='sp':
+        return 2
+    else:
+        return int(string.replace("x",""))
+
+def instruction_R(func7,rs2,rs1,func3,rd,opcode):
+    instruction=[]
+    cont=0
+    while cont < 7:
+        instruction.append(opcode[-1])
+        opcode=opcode[:-1]
+        cont+=1
+    while cont < 12:
+        instruction.append(rd[-1])
+        rd=rd[:-1]
+        cont+=1
+    while cont < 15:
+        instruction.append(func3[-1])
+        func3=func3[:-1]
+        cont+=1
+    while cont < 20:
+        instruction.append(rs1[-1])
+        rs1=rs1[:-1]
+        cont+=1
+    while cont < 25:
+        instruction.append(rs2[-1])
+        rs2=rs2[:-1]
+        cont+=1
+    while cont < 32:
+        instruction.append(func7[-1])
+        func7=func7[:-1]
+        cont+=1
+    return instruction
+
 
 
 if __name__ =="__main__":
@@ -178,17 +216,31 @@ if __name__ =="__main__":
     }
 
     TypeList = [Dictionary_R,Dictionary_I,Dictionary_IJ,Dictionary_L,Dictionary_J,Dictionary_Ului,Dictionary_Uauipc,Dictionary_S,Dictionary_B]
-    register=[];
+    instruction_32bits=[];
     linesList=[]
     with open("InputSampleLLL.txt",'r') as Input:
         linesList=Input.readlines()
         for line in linesList:
             elements=line.split(",")
             elements=takeJumpAwayArray(elements)
-            mnemonic=find_the_mnemonic(TypeList,elements[0])
-            opcode=Dictionary_OpCode[mnemonic]
-            func3=Dictionary_Func3[elements[0]]
-            func7=Dictionary_Func7[elements[0]]
+            type=find_the_type(TypeList,elements[0])#elements[0]:mnemonic: addi, Type: I
+            opcode=(Dictionary_OpCode[type])
+            func3=(Dictionary_Func3[elements[0]])
+            func7=(Dictionary_Func7[elements[0]])
+
+            rd=0
+            rs1=0
+            rs2=0
+            imm=0
+            if(type=='R'):
+                rd=bin(decode_identifier(elements[1]))
+                rs1=bin(decode_identifier(elements[2]))
+                rs2=bin(decode_identifier(elements[3]))
+                instruction_32bits=instruction_R(func7,rs2,rs1,func3,rd,opcode)
+                print(rs1)
+                #print(instruction_32bits)
+
+
 
 
 
