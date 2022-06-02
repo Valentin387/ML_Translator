@@ -1,6 +1,2 @@
-addi,sp,sp,-20
-sw,x8,0,sp
-bge,x18,x9,17
-beq,x0,x0,-16
-jal,x1,20
-jal,x1,-20
+jal,x1,44
+jal,x1,-44

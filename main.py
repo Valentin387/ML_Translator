@@ -696,6 +696,7 @@ if __name__ =="__main__":
                 for i in range(8):
                     temp=inst32bf[cont]+inst32bf[cont+1]+inst32bf[cont+2]+inst32bf[cont+3]
                     Hplus=Dictionary_Hexadecimal[temp]
+                    print(temp)
                     Hexa = Hexa + Hplus
                     cont+=4
                 with open("OutputSampleHex.txt",'a') as Output:
