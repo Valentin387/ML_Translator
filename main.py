@@ -50,7 +50,10 @@ def instruction_R(func7,rs2,rs1,func3,rd,opcode):
         opcode=opcode[:-1]
         cont+=1
     while cont < 12:
-        instruction.append(rd[-1])
+        if(rd[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rd[-1])
         rd=rd[:-1]
         cont+=1
     while cont < 15:
@@ -58,11 +61,17 @@ def instruction_R(func7,rs2,rs1,func3,rd,opcode):
         func3=func3[:-1]
         cont+=1
     while cont < 20:
-        instruction.append(rs1[-1])
+        if(rs1[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rs1[-1])
         rs1=rs1[:-1]
         cont+=1
     while cont < 25:
-        instruction.append(rs2[-1])
+        if(rs2[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rs2[-1])
         rs2=rs2[:-1]
         cont+=1
     while cont < 32:
@@ -237,8 +246,7 @@ if __name__ =="__main__":
                 rs1=bin(decode_identifier(elements[2]))
                 rs2=bin(decode_identifier(elements[3]))
                 instruction_32bits=instruction_R(func7,rs2,rs1,func3,rd,opcode)
-                print(rs1)
-                #print(instruction_32bits)
+                print(instruction_32bits)
 
 
 
