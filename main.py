@@ -245,6 +245,133 @@ def instruction_B(isNeg,rs2,rs1,func3,label,opcode):
         instruction.append(label[-1])
     return instruction
 
+def instruction_U(isNeg,label,rd,opcode):#it probably works
+    instruction=[]
+    cont=0
+    while cont < 7:
+        instruction.append(opcode[-1])
+        opcode=opcode[:-1]
+        cont+=1
+    while cont < 12:
+        if(not rd): #if it's empty
+            instruction.append('0')
+        elif(rd[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rd[-1])
+        rd=rd[:-1]
+        cont+=1
+    for i in range(12):
+        label=label[:-1]
+
+    while cont < 31:
+        if (not label):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
+        elif(label[-1]=='b'):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
+        else:
+            instruction.append(label[-1])
+        label=label[:-1]
+        cont+=1
+    return instruction
+
+def instruction_J(isNeg,label,rd,opcode):
+    instruction=[]
+    cont=0
+    while cont < 7:
+        instruction.append(opcode[-1])
+        opcode=opcode[:-1]
+        cont+=1
+    while cont < 12:
+        if(not rd): #if it's empty
+            instruction.append('0')
+        elif(rd[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rd[-1])
+        rd=rd[:-1]
+        cont+=1
+    label=label[:-1]
+
+    label_copy1=label
+    label_copy2=label
+    label_copy3=label
+
+    for i in range(12):
+        label=label[:-1]
+
+    while cont < 20:
+        if (not label):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
+        elif(label[-1]=='b'):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
+        else:
+            instruction.append(label[-1])
+        label=label[:-1]
+        cont+=1
+
+    for i in range(11):
+        label_copy1=label_copy1[:-1]
+    if (not label_copy1):
+        if isNeg:
+            instruction.append('1')
+        else:
+            instruction.append('0')
+    elif(label_copy1[-1]=='b'):
+        if isNeg:
+            instruction.append('1')
+        else:
+            instruction.append('0')
+    else:
+        instruction.append(label_copy1[-1])
+
+    label_copy2=label_copy2[:-1]
+    while cont < 31:
+        if (not label_copy2):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
+        elif(label_copy2[-1]=='b'):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
+        else:
+            instruction.append(label_copy2[-1])
+        label_copy2=label_copy2[:-1]
+        cont+=1
+
+    for i in range(20):
+        label_copy3=label_copy3[:-1]
+
+    if (not label_copy3):
+        if isNeg:
+            instruction.append('1')
+        else:
+            instruction.append('0')
+    elif(label_copy3[-1]=='b'):
+        if isNeg:
+            instruction.append('1')
+        else:
+            instruction.append('0')
+    else:
+        instruction.append(label_copy3[-1])
+    return instruction
+
+
 def converter_A2Complement(imm):
     new_imm=""
     firstOneBurned=False
@@ -535,11 +662,47 @@ if __name__ =="__main__":
                     Output.write(Hexa)
                     Output.write("\n")
             if (type=='Ului' or type=='Uauipc'):
-                print("U")
+                rd=bin(decode_identifier(elements[1]))
+                label=bin(decode_identifier(elements[2])*4)
+                if(label[0]=='-'):
+                    isNeg=True
+                    label=converter_A2Complement(label)
 
+                instruction_32bits=instruction_U(isNeg,label,rd,opcode)
+                inst32bf = flip_array(instruction_32bits)
+                #print(inst32bf)
+                cont=0
+                Hexa=""
+                for i in range(8):
+                    temp=inst32bf[cont]+inst32bf[cont+1]+inst32bf[cont+2]+inst32bf[cont+3]
+                    Hplus=Dictionary_Hexadecimal[temp]
+                    Hexa = Hexa + Hplus
+                    cont+=4
+                with open("OutputSampleHex.txt",'a') as Output:
+                    Output.write(Hexa)
+                    Output.write("\n")
+            if(type=='J'):
+                rd=bin(decode_identifier(elements[1]))
+                label=bin(decode_identifier(elements[2])*4)
+                if(label[0]=='-'):
+                    isNeg=True
+                    label=converter_A2Complement(label)
 
+                instruction_32bits=instruction_J(isNeg,label,rd,opcode)
+                inst32bf = flip_array(instruction_32bits)
+                #print(inst32bf)
+                cont=0
+                Hexa=""
+                for i in range(8):
+                    temp=inst32bf[cont]+inst32bf[cont+1]+inst32bf[cont+2]+inst32bf[cont+3]
+                    Hplus=Dictionary_Hexadecimal[temp]
+                    Hexa = Hexa + Hplus
+                    cont+=4
+                with open("OutputSampleHex.txt",'a') as Output:
+                    Output.write(Hexa)
+                    Output.write("\n")
 
-
+    print("\n\n END OF LINE \n")
 
     #with open("OutputSampleHex.txt",'a') as Output:
         #Output.write("\ncachorro")
