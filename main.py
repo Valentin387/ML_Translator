@@ -80,7 +80,13 @@ def instruction_R(func7,rs2,rs1,func3,rd,opcode):
         cont+=1
     return instruction
 
-
+def flip_array(array):
+    l1=[]
+    count=1
+    for e in array:
+        l1.append(array[-count])
+        count+=1
+    return l1
 
 if __name__ =="__main__":
 
@@ -224,6 +230,25 @@ if __name__ =="__main__":
     "auipc":"0000000"
     }
 
+    Dictionary_Hexadecimal = {
+    "0000":"0",
+    "0001":"1",
+    "0010":"2",
+    "0011":"3",
+    "0100":"4",
+    "0101":"5",
+    "0110":"6",
+    "0111":"7",
+    "1000":"8",
+    "1001":"9",
+    "1010":"A",
+    "1011":"B",
+    "1100":"C",
+    "1101":"D",
+    "1110":"E",
+    "1111":"F",
+    }
+
     TypeList = [Dictionary_R,Dictionary_I,Dictionary_IJ,Dictionary_L,Dictionary_J,Dictionary_Ului,Dictionary_Uauipc,Dictionary_S,Dictionary_B]
     instruction_32bits=[];
     linesList=[]
@@ -242,11 +267,20 @@ if __name__ =="__main__":
             rs2=0
             imm=0
             if(type=='R'):
-                rd=bin(decode_identifier(elements[1]))
+                rd=bin(decode_identifier(elements[1])) #beware, 'bin' is in actually just string, and strings are NOT lists
                 rs1=bin(decode_identifier(elements[2]))
                 rs2=bin(decode_identifier(elements[3]))
-                instruction_32bits=instruction_R(func7,rs2,rs1,func3,rd,opcode)
-                print(instruction_32bits)
+                instruction_32bits=instruction_R(func7,rs2,rs1,func3,rd,opcode) #I got my binary code
+                #Now I must flip it (hardware notation you know)
+                inst32bf = flip_array(instruction_32bits) #instruction_32bits_flipped
+                cont=0
+                Hexa=""
+                for i in range(8):
+                    temp=inst32bf[cont]+inst32bf[cont+1]+inst32bf[cont+2]+inst32bf[cont+3]
+                    Hplus=Dictionary_Hexadecimal[temp]
+                    Hexa = Hexa + Hplus
+                    cont+=4
+                print(Hexa)
 
 
 
