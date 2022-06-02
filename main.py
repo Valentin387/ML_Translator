@@ -23,6 +23,7 @@ def takeJumpAwayArray(list):
             l1.append(word)
     return l1
 
+#this is the ugliest code I've made. But it works
 def find_the_mnemonic(list_of_Type_dictionaries,word):
     mnemonic=""
     for d in list_of_Type_dictionaries:
@@ -41,7 +42,7 @@ if __name__ =="__main__":
     }
 
     Dictionary_I = {
-    'I':("addi","slli","slti","sltiu","xori","srli","srai","ori","andi")
+    'I':["addi","slli","slti","sltiu","xori","srli","srai","ori","andi"]
     }
 
     Dictionary_IJ = {
@@ -77,8 +78,8 @@ if __name__ =="__main__":
     'I':"0010011",
     'L':"0000011",
     'LR':"1100111",
-    'S':"1100011",
-    'B':"0100011",
+    'S':"0100011",
+    'B':"1100011",
     'J':"1101111",
     'Ului':"0110111",
     'Uauipc':"0010111"
@@ -123,12 +124,57 @@ if __name__ =="__main__":
 
     "sb":"000",
     "sh":"001",
-    "sw":"010"
+    "sw":"010",
+
+    "jal":"000",
+    "lui":"000",
+    "auipc":"000"
     }
 
     Dictionary_Func7 = {
+    "add":"0000000",
     "sub":"0100000",
-    "sra":"0100000"
+    "sll":"0000000",
+    "slt":"0000000",
+    "sltu":"0000000",
+    "xor":"0000000",
+    "srl":"0000000",
+    "sra":"0100000",
+    "or":"0000000",
+    "and":"0000000",
+
+    "addi":"0000000",
+    "slli":"0000000",
+    "slti":"0000000",
+    "sltiu":"0000000",
+    "xori":"0000000",
+    "srli":"0000000",
+    "srai":"0000000",
+    "ori":"0000000",
+    "andi":"0000000",
+
+    "lb":"0000000",
+    "lh":"0000000",
+    "lw":"0000000",
+    "lbu":"0000000",
+    "lhu":"0000000",
+
+    "jalr":"0000000",
+
+    "beq":"0000000",
+    "bne":"0000000",
+    "blt":"0000000",
+    "bge":"0000000",
+    "bltu":"0000000",
+    "bgeu":"0000000",
+
+    "sb":"0000000",
+    "sh":"0000000",
+    "sw":"0000000",
+
+    "jal":"0000000",
+    "lui":"0000000",
+    "auipc":"0000000"
     }
 
     TypeList = [Dictionary_R,Dictionary_I,Dictionary_IJ,Dictionary_L,Dictionary_J,Dictionary_Ului,Dictionary_Uauipc,Dictionary_S,Dictionary_B]
@@ -140,8 +186,9 @@ if __name__ =="__main__":
             elements=line.split(",")
             elements=takeJumpAwayArray(elements)
             mnemonic=find_the_mnemonic(TypeList,elements[0])
-            print(mnemonic)
-
+            opcode=Dictionary_OpCode[mnemonic]
+            func3=Dictionary_Func3[elements[0]]
+            func7=Dictionary_Func7[elements[0]]
 
 
 
