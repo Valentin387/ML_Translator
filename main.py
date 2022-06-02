@@ -221,17 +221,26 @@ def instruction_B(isNeg,rs2,rs1,func3,label,opcode):
         rs2=rs2[:-1]
         cont+=1
     while cont < 31:
-        if(not label): #if it's empty
-            instruction.append('0')
+        if (not label):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
         elif(label[-1]=='b'):
-            instruction.append('0')
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
         else:
             instruction.append(label[-1])
         label=label[:-1]
         cont+=1
     label=label[:-1]
     if (not label):
-        instruction.append('0')
+        if isNeg:
+            instruction.append('1')
+        else:
+            instruction.append('0')
     else:
         instruction.append(label[-1])
     return instruction
@@ -509,6 +518,7 @@ if __name__ =="__main__":
 
                 instruction_32bits=instruction_B(isNeg,rs2,rs1,func3,label,opcode)
                 inst32bf = flip_array(instruction_32bits)
+                #print(inst32bf)
                 cont=0
                 Hexa=""
                 for i in range(8):
