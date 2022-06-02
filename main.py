@@ -42,7 +42,9 @@ def instruction_R(func7,rs2,rs1,func3,rd,opcode):
         opcode=opcode[:-1]
         cont+=1
     while cont < 12:
-        if(rd[-1]=='b'):
+        if (not rd):
+            instruction.append('0')
+        elif(rd[-1]=='b'):
             instruction.append('0')
         else:
             instruction.append(rd[-1])
@@ -53,14 +55,18 @@ def instruction_R(func7,rs2,rs1,func3,rd,opcode):
         func3=func3[:-1]
         cont+=1
     while cont < 20:
-        if(rs1[-1]=='b'):
+        if (not rs1):
+            instruction.append('0')
+        elif(rs1[-1]=='b'):
             instruction.append('0')
         else:
             instruction.append(rs1[-1])
         rs1=rs1[:-1]
         cont+=1
     while cont < 25:
-        if(rs2[-1]=='b'):
+        if (not rs2):
+            instruction.append('0')
+        elif(rs2[-1]=='b'):
             instruction.append('0')
         else:
             instruction.append(rs2[-1])
@@ -71,6 +77,70 @@ def instruction_R(func7,rs2,rs1,func3,rd,opcode):
         func7=func7[:-1]
         cont+=1
     return instruction
+
+def instruction_I(isNeg,imm,rs1,func3,rd,opcode):
+    instruction=[]
+    cont=0
+    while cont < 7:
+        instruction.append(opcode[-1])
+        opcode=opcode[:-1]
+        cont+=1
+    while cont < 12:
+        if(not rd): #if it's empty
+            instruction.append('0')
+        elif(rd[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rd[-1])
+        rd=rd[:-1]
+        cont+=1
+    while cont < 15:
+        instruction.append(func3[-1])
+        func3=func3[:-1]
+        cont+=1
+    while cont < 20:
+        if (not rs1):
+            instruction.append('0')
+        elif(rs1[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rs1[-1])
+        rs1=rs1[:-1]
+        cont+=1
+    while cont < 32:
+        if (not imm):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
+        elif(imm[-1]=='b'):
+            if isNeg:
+                instruction.append('1')
+            else:
+                instruction.append('0')
+        else:
+            instruction.append(imm[-1])
+        imm=imm[:-1]
+        cont+=1
+    return instruction
+
+def converter_A2Complement(imm):
+    new_imm=""
+    firstOneBurned=False
+    while imm[-1]!='b':
+        #print(new_imm)
+        if (firstOneBurned):
+            if(imm[-1]=='1'):
+                new_imm='0'+new_imm
+            else:
+                new_imm='1'+new_imm
+        else:
+            new_imm=imm[-1]+new_imm
+        if(imm[-1]=='1'):
+            firstOneBurned=True
+        imm=imm[:-1]
+    new_imm=new_imm[1:]#I remove the '-'
+    return new_imm
 
 def flip_array(array):
     l1=[]
@@ -254,10 +324,11 @@ if __name__ =="__main__":
             func3=(Dictionary_Func3[elements[0]])
             func7=(Dictionary_Func7[elements[0]])
 
-            rd=0
-            rs1=0
-            rs2=0
-            imm=0
+            rd=""
+            rs1=""
+            rs2=""
+            imm=""
+            isNeg=False
             if(type=='R'):
                 rd=bin(decode_identifier(elements[1])) #beware, 'bin' is in actually just string, and strings are NOT lists
                 rs1=bin(decode_identifier(elements[2]))
@@ -273,6 +344,29 @@ if __name__ =="__main__":
                     Hexa = Hexa + Hplus
                     cont+=4
                 #print(Hexa)
+                with open("OutputSampleHex.txt",'a') as Output:
+                    Output.write(Hexa)
+                    Output.write("\n")
+            if (type=='I'):
+                rd=bin(decode_identifier(elements[1]))
+                rs1=bin(decode_identifier(elements[2]))
+                imm=bin(decode_identifier(elements[3]))
+                if(imm[0]=='-'):
+                    isNeg=True
+                    print(imm)
+                    imm=converter_A2Complement(imm)
+                    print(imm)
+
+                instruction_32bits=instruction_I(isNeg,imm,rs1,func3,rd,opcode)
+                inst32bf = flip_array(instruction_32bits)
+                #print(inst32bf)
+                cont=0
+                Hexa=""
+                for i in range(8):
+                    temp=inst32bf[cont]+inst32bf[cont+1]+inst32bf[cont+2]+inst32bf[cont+3]
+                    Hplus=Dictionary_Hexadecimal[temp]
+                    Hexa = Hexa + Hplus
+                    cont+=4
                 with open("OutputSampleHex.txt",'a') as Output:
                     Output.write(Hexa)
                     Output.write("\n")
