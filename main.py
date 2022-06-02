@@ -127,8 +127,12 @@ def instruction_I(isNeg,imm,rs1,func3,rd,opcode):
 def converter_A2Complement(imm):
     new_imm=""
     firstOneBurned=False
+    if(imm[-1]=='1'):
+        new_imm=imm[-1]+new_imm
+        imm=imm[:-1]
+        firstOneBurned=True
+
     while imm[-1]!='b':
-        #print(new_imm)
         if (firstOneBurned):
             if(imm[-1]=='1'):
                 new_imm='0'+new_imm
@@ -139,7 +143,6 @@ def converter_A2Complement(imm):
         if(imm[-1]=='1'):
             firstOneBurned=True
         imm=imm[:-1]
-    new_imm=new_imm[1:]#I remove the '-'
     return new_imm
 
 def flip_array(array):
@@ -353,13 +356,10 @@ if __name__ =="__main__":
                 imm=bin(decode_identifier(elements[3]))
                 if(imm[0]=='-'):
                     isNeg=True
-                    print(imm)
                     imm=converter_A2Complement(imm)
-                    print(imm)
 
                 instruction_32bits=instruction_I(isNeg,imm,rs1,func3,rd,opcode)
                 inst32bf = flip_array(instruction_32bits)
-                #print(inst32bf)
                 cont=0
                 Hexa=""
                 for i in range(8):
