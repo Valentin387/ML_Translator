@@ -1,2 +1,3 @@
 addi,sp,sp,-20
 sw,x8,0,sp
+bge,x18,x9,17

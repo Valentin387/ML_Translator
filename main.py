@@ -173,6 +173,69 @@ def instruction_S(rs2,rs1,func3,imm,opcode):
         cont+=1
     return instruction
 
+def instruction_B(isNeg,rs2,rs1,func3,label,opcode):
+    instruction=[]
+    cont=0
+    while cont < 7:
+        instruction.append(opcode[-1])
+        opcode=opcode[:-1]
+        cont+=1
+    if len(label)>=11 and label[-10]!='b':
+        instruction.append(label[-10])
+    else:
+        if isNeg:
+            instruction.append('1')
+        else:
+            instruction.append('0')
+    cont+=1
+    label=label[:-1]
+    while cont < 12:
+        if(not label): #if it's empty
+            instruction.append('0')
+        elif(label[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(label[-1])
+        label=label[:-1]
+        cont+=1
+    while cont < 15:
+        instruction.append(func3[-1])
+        func3=func3[:-1]
+        cont+=1
+    while cont < 20:
+        if (not rs1):
+            instruction.append('0')
+        elif(rs1[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rs1[-1])
+        rs1=rs1[:-1]
+        cont+=1
+    while cont < 25:
+        if (not rs2):
+            instruction.append('0')
+        elif(rs2[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(rs2[-1])
+        rs2=rs2[:-1]
+        cont+=1
+    while cont < 31:
+        if(not label): #if it's empty
+            instruction.append('0')
+        elif(label[-1]=='b'):
+            instruction.append('0')
+        else:
+            instruction.append(label[-1])
+        label=label[:-1]
+        cont+=1
+    label=label[:-1]
+    if (not label):
+        instruction.append('0')
+    else:
+        instruction.append(label[-1])
+    return instruction
+
 def converter_A2Complement(imm):
     new_imm=""
     firstOneBurned=False
@@ -425,6 +488,26 @@ if __name__ =="__main__":
                 rs1=bin(decode_identifier(elements[3]))
                 #for type 'S' the imm is never negative ('til where I know')
                 instruction_32bits=instruction_S(rs2,rs1,func3,imm,opcode)
+                inst32bf = flip_array(instruction_32bits)
+                cont=0
+                Hexa=""
+                for i in range(8):
+                    temp=inst32bf[cont]+inst32bf[cont+1]+inst32bf[cont+2]+inst32bf[cont+3]
+                    Hplus=Dictionary_Hexadecimal[temp]
+                    Hexa = Hexa + Hplus
+                    cont+=4
+                with open("OutputSampleHex.txt",'a') as Output:
+                    Output.write(Hexa)
+                    Output.write("\n")
+            if(type=='B'):
+                rs1=bin(decode_identifier(elements[1]))
+                rs2=bin(decode_identifier(elements[2]))
+                label=bin(decode_identifier(elements[3])*4)
+                if(label[0]=='-'):
+                    isNeg=True
+                    label=converter_A2Complement(label)
+
+                instruction_32bits=instruction_B(isNeg,rs2,rs1,func3,label,opcode)
                 inst32bf = flip_array(instruction_32bits)
                 cont=0
                 Hexa=""
