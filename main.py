@@ -1,11 +1,3 @@
-"""
-class Instruction():
-    def __init__(self,string):
-        self.mnemonic=
-        self.rd=
-        self.rs1=
-        self.rs2=
-"""
 
 def takeJumpAway(string):
     newString=string.replace("\n","")
@@ -280,7 +272,10 @@ if __name__ =="__main__":
                     Hplus=Dictionary_Hexadecimal[temp]
                     Hexa = Hexa + Hplus
                     cont+=4
-                print(Hexa)
+                #print(Hexa)
+                with open("OutputSampleHex.txt",'a') as Output:
+                    Output.write(Hexa)
+                    Output.write("\n")
 
 
 
