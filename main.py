@@ -7,6 +7,33 @@ class Instruction():
         self.rs2=
 """
 
+def takeJumpAway(string):
+    newString=string.replace("\n","")
+    return newString
+
+def takeJumpAwayArray(list):
+    l1=[]
+    count=0
+    tam=len(list)
+    for word in list:
+        count+=1
+        if (count == tam):
+            l1.append(takeJumpAway(word))
+        else:
+            l1.append(word)
+    return l1
+
+def find_the_mnemonic(list_of_Type_dictionaries,word):
+    mnemonic=""
+    for d in list_of_Type_dictionaries:
+        for new_k,new_val in d.items():
+            for i in new_val:
+                if word==i:
+                    mnemonic=new_k
+                    break
+    return mnemonic
+
+
 if __name__ =="__main__":
 
     Dictionary_R = {
@@ -14,7 +41,7 @@ if __name__ =="__main__":
     }
 
     Dictionary_I = {
-    'I':["addi","slli","slti","sltiu","xori","srli","srai","ori","andi"]
+    'I':("addi","slli","slti","sltiu","xori","srli","srai","ori","andi")
     }
 
     Dictionary_IJ = {
@@ -104,15 +131,17 @@ if __name__ =="__main__":
     "sra":"0100000"
     }
 
-    print("hola")
+    TypeList = [Dictionary_R,Dictionary_I,Dictionary_IJ,Dictionary_L,Dictionary_J,Dictionary_Ului,Dictionary_Uauipc,Dictionary_S,Dictionary_B]
     register=[];
     linesList=[]
     with open("InputSampleLLL.txt",'r') as Input:
         linesList=Input.readlines()
         for line in linesList:
             elements=line.split(",")
-            mnemonic=Dictionary_OpCode[elements[0]]
-            print(mnemonic + "\n")
+            elements=takeJumpAwayArray(elements)
+            mnemonic=find_the_mnemonic(TypeList,elements[0])
+            print(mnemonic)
+
 
 
 
