@@ -15,15 +15,13 @@ def takeJumpAwayArray(list):
             l1.append(word)
     return l1
 
-#this is the ugliest code I've made. But it works
-def find_the_type(list_of_Type_dictionaries,word):
+def find_the_type(dictionary,word):
     type=""
-    for d in list_of_Type_dictionaries:
-        for new_k,new_val in d.items():
-            for i in new_val:
-                if word==i:
-                    type=new_k
-                    break
+    for new_k,new_val in dictionary.items():
+        for i in new_val:
+            if word==i:
+                type=new_k
+                break
     return type
 
 def decode_identifier(string):
@@ -245,7 +243,7 @@ def instruction_B(isNeg,rs2,rs1,func3,label,opcode):
         instruction.append(label[-1])
     return instruction
 
-def instruction_U(isNeg,label,rd,opcode):#it probably works
+def instruction_U(isNeg,label,rd,opcode):
     instruction=[]
     cont=0
     while cont < 7:
@@ -326,18 +324,17 @@ def instruction_J(isNeg,label,rd,opcode):
         label_copy1=label_copy1[:-1]
     if (not label_copy1):
         if isNeg:
-            instruction.append('1')#1
+            instruction.append('1')
         else:
-            instruction.append('0')#0
+            instruction.append('0')
     elif(label_copy1[-1]=='b'):
         if isNeg:
-            instruction.append('1')#1
+            instruction.append('1')
         else:
-            instruction.append('0')#0
+            instruction.append('0')
     else:
         instruction.append(label_copy1[-1])
     cont+=1
-    #label_copy2=label_copy2[:-1]
     while cont < 31:
         if (not label_copy2):
             if isNeg:
@@ -371,7 +368,6 @@ def instruction_J(isNeg,label,rd,opcode):
         instruction.append(label_copy3[-1])
     return instruction
 
-
 def converter_A2Complement(imm):
     new_imm=""
     firstOneBurned=False
@@ -403,39 +399,23 @@ def flip_array(array):
 
 if __name__ =="__main__":
 
-    Dictionary_R = {
-    'R':["add","sub","sll","slt","sltu","xor","srl","sra","or","and"]
-    }
+    TypeList = {
+    'R':["add","sub","sll","slt","sltu","xor","srl","sra","or","and"],
 
-    Dictionary_I = {
-    'I':["addi","slli","slti","sltiu","xori","srli","srai","ori","andi"]
-    }
+    'I':["addi","slli","slti","sltiu","xori","srli","srai","ori","andi"],
 
-    Dictionary_IJ = {
-    "IJ":["jalr"]
-    }
+    "IJ":["jalr"],
 
-    Dictionary_L = {
-    'L':["lb","lh","lw","lbu","lhu"]
-    }
+    'L':["lb","lh","lw","lbu","lhu"],
 
-    Dictionary_J = {
-    'J':["jal"]
-    }
+    'J':["jal"],
 
-    Dictionary_Ului = {
-    'Ului':["lui"]
-    }
+    'Ului':["lui"],
 
-    Dictionary_Uauipc = {
-    'Uauipc':["auipc"]
-    }
+    'Uauipc':["auipc"],
 
-    Dictionary_S = {
-    'S':["sb","sh","sw"]
-    }
+    'S':["sb","sh","sw"],
 
-    Dictionary_B = {
     'B':["beq","bne","blt","bge","bltu","bgeu"]
     }
 
@@ -562,7 +542,6 @@ if __name__ =="__main__":
     "1111":"F",
     }
 
-    TypeList = [Dictionary_R,Dictionary_I,Dictionary_IJ,Dictionary_L,Dictionary_J,Dictionary_Ului,Dictionary_Uauipc,Dictionary_S,Dictionary_B]
     instruction_32bits=[];
     linesList=[]
     with open("InputSampleLLL.txt",'r') as Input:
@@ -594,7 +573,6 @@ if __name__ =="__main__":
                     Hplus=Dictionary_Hexadecimal[temp]
                     Hexa = Hexa + Hplus
                     cont+=4
-                #print(Hexa)
                 with open("OutputSampleHex.txt",'a') as Output:
                     Output.write(Hexa)
                     Output.write("\n")
@@ -650,7 +628,6 @@ if __name__ =="__main__":
 
                 instruction_32bits=instruction_B(isNeg,rs2,rs1,func3,label,opcode)
                 inst32bf = flip_array(instruction_32bits)
-                #print(inst32bf)
                 cont=0
                 Hexa=""
                 for i in range(8):
@@ -670,7 +647,6 @@ if __name__ =="__main__":
 
                 instruction_32bits=instruction_U(isNeg,label,rd,opcode)
                 inst32bf = flip_array(instruction_32bits)
-                #print(inst32bf)
                 cont=0
                 Hexa=""
                 for i in range(8):
@@ -690,7 +666,6 @@ if __name__ =="__main__":
 
                 instruction_32bits=instruction_J(isNeg,label,rd,opcode)
                 inst32bf = flip_array(instruction_32bits)
-                print(inst32bf)
                 cont=0
                 Hexa=""
                 for i in range(8):
@@ -702,7 +677,6 @@ if __name__ =="__main__":
                     Output.write(Hexa)
                     Output.write("\n")
 
-    print("\n\n END OF LINE \n")
+    print("\n\n Set of low level language RISC-V instructions translated to MACHINE LANGUAGE successfully \n")
 
-    #with open("OutputSampleHex.txt",'a') as Output:
-        #Output.write("\ncachorro")
+#
