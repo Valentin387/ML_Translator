@@ -264,7 +264,7 @@ def instruction_U(isNeg,label,rd,opcode):#it probably works
     for i in range(12):
         label=label[:-1]
 
-    while cont < 31:
+    while cont < 32:
         if (not label):
             if isNeg:
                 instruction.append('1')
