@@ -303,7 +303,7 @@ def instruction_J(isNeg,label,rd,opcode):
     label_copy2=label
     label_copy3=label
 
-    for i in range(12):
+    for i in range(11):
         label=label[:-1]
 
     while cont < 20:
@@ -322,22 +322,22 @@ def instruction_J(isNeg,label,rd,opcode):
         label=label[:-1]
         cont+=1
 
-    for i in range(11):
+    for i in range(10):
         label_copy1=label_copy1[:-1]
     if (not label_copy1):
         if isNeg:
-            instruction.append('1')
+            instruction.append('1')#1
         else:
-            instruction.append('0')
+            instruction.append('0')#0
     elif(label_copy1[-1]=='b'):
         if isNeg:
-            instruction.append('1')
+            instruction.append('1')#1
         else:
-            instruction.append('0')
+            instruction.append('0')#0
     else:
         instruction.append(label_copy1[-1])
-
-    label_copy2=label_copy2[:-1]
+    cont+=1
+    #label_copy2=label_copy2[:-1]
     while cont < 31:
         if (not label_copy2):
             if isNeg:
@@ -354,7 +354,7 @@ def instruction_J(isNeg,label,rd,opcode):
         label_copy2=label_copy2[:-1]
         cont+=1
 
-    for i in range(20):
+    for i in range(19):
         label_copy3=label_copy3[:-1]
 
     if (not label_copy3):
@@ -690,13 +690,12 @@ if __name__ =="__main__":
 
                 instruction_32bits=instruction_J(isNeg,label,rd,opcode)
                 inst32bf = flip_array(instruction_32bits)
-                #print(inst32bf)
+                print(inst32bf)
                 cont=0
                 Hexa=""
                 for i in range(8):
                     temp=inst32bf[cont]+inst32bf[cont+1]+inst32bf[cont+2]+inst32bf[cont+3]
                     Hplus=Dictionary_Hexadecimal[temp]
-                    print(temp)
                     Hexa = Hexa + Hplus
                     cont+=4
                 with open("OutputSampleHex.txt",'a') as Output:
